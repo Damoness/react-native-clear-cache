@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import ClearCache from 'react-native-clear-cache';
+import ClearCache from '../../src/index';
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    ClearCache.multiply(3, 7).then(setResult);
+    ClearCache.getCacheSize().then(({ fileSize, unit }) => {
+      setResult(fileSize + unit);
+    });
   }, []);
 
   return (
