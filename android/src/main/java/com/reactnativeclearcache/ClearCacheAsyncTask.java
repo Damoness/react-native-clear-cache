@@ -4,16 +4,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
+
 import java.io.File;
 
 
 public class ClearCacheAsyncTask extends AsyncTask<Integer,Integer,String> {
   public ClearCacheModule myclearCacheModule = null;
-  public Callback callback;
-  public ClearCacheAsyncTask(ClearCacheModule clearCacheModule, Callback callback) {
+  public Promise promise;
+  public ClearCacheAsyncTask(ClearCacheModule clearCacheModule, Promise promise) {
     super();
     this.myclearCacheModule = clearCacheModule;
-    this.callback = callback;
+    this.promise = promise;
   }
 
   @Override
@@ -24,7 +26,7 @@ public class ClearCacheAsyncTask extends AsyncTask<Integer,Integer,String> {
   @Override
   protected void onPostExecute(String s) {
     super.onPostExecute(s);
-    callback.invoke();
+    promise.resolve(true);
 
   }
 

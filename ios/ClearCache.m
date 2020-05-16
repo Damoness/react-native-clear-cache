@@ -20,8 +20,8 @@ RCT_EXPORT_METHOD(runClearCache:(RCTPromiseResolveBlock)resolve                 
 {
     [self clearFile:^(NSArray *array){
 
-        resolve(@[]);
-        
+        resolve(@(true));
+
     }];
 }
 
@@ -29,53 +29,53 @@ RCT_EXPORT_METHOD(runClearCache:(RCTPromiseResolveBlock)resolve                 
 // 显示缓存大小
 -(NSString*)filePath:(NSString*)type
 {
-    
+
     NSString * cachPath = [ NSSearchPathForDirectoriesInDomains ( NSCachesDirectory , NSUserDomainMask , YES ) firstObject ];
-    
+
     return [self folderSizeAtPath :cachPath type:type];
-    
+
 }
 
 //1:首先我们计算一下 单个文件的大小
 - ( long long ) fileSizeAtPath:( NSString *) filePath{
-    
+
     NSFileManager * manager = [ NSFileManager defaultManager];
-    
+
     if ([manager fileExistsAtPath :filePath]){
-        
+
         return [[manager attributesOfItemAtPath :filePath error : nil ] fileSize ];
     }
-    
+
     return 0 ;
-    
+
 }
 
 //2:遍历文件夹获得文件夹大小，返回多少 M（提示：你可以在工程界设置（)m）
 - (NSString*) folderSizeAtPath:( NSString *) folderPath type:(NSString*)type{
-    
+
     NSFileManager * manager = [ NSFileManager defaultManager ];
-    
+
     if (![manager fileExistsAtPath :folderPath]) return 0 ;
-    
+
     NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath :folderPath] objectEnumerator ];
-    
+
     NSString * fileName;
-    
+
     long long folderSize = 0 ;
-    
+
     while ((fileName = [childFilesEnumerator nextObject ]) != nil ){
-        
+
         NSString * fileAbsolutePath = [folderPath stringByAppendingPathComponent :fileName];
-        
+
         folderSize += [ self fileSizeAtPath :fileAbsolutePath];
-        
+
     }
-    
+
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.roundingMode = NSNumberFormatterRoundFloor;
     formatter.maximumFractionDigits = 2;
-   
-    
+
+
     NSString* strFileSize = [[NSString alloc]init];
     NSMutableString* strFileName = [[NSMutableString alloc]init];
     if (folderSize < 1024) {
@@ -95,41 +95,41 @@ RCT_EXPORT_METHOD(runClearCache:(RCTPromiseResolveBlock)resolve                 
         strFileSize = [formatter stringFromNumber:fileSize];
         [strFileName setString:@"G"];
     }
-    
+
     if([type isEqualToString:@"1"]){
         return strFileName;
     }else{
         return strFileSize;
     }
-    
-    
+
+
 }
 
 // 清理缓存
 - (void)clearFile:(RCTResponseSenderBlock)callback
 {
     NSString * cachPath = [ NSSearchPathForDirectoriesInDomains ( NSCachesDirectory , NSUserDomainMask , YES ) firstObject ];
-    
+
     NSArray * files = [[ NSFileManager defaultManager ] subpathsAtPath :cachPath];
-    
+
 //    NSLog ( @"cachpath = %@" , cachPath);
-    
+
     for ( NSString * p in files) {
-        
+
         NSError * error = nil ;
-        
+
         NSString * path = [cachPath stringByAppendingPathComponent :p];
-        
+
         if ([[ NSFileManager defaultManager ] fileExistsAtPath :path]) {
-            
+
             [[ NSFileManager defaultManager ] removeItemAtPath :path error :&error];
-            
+
         }
-        
+
     }
-    
+
     callback(@[[NSNull null]]);
-    
+
 }
 
 @end

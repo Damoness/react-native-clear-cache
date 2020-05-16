@@ -63,9 +63,9 @@ public class ClearCacheModule extends ReactContextBaseJavaModule {
 
   //清除缓存
   @ReactMethod
-  public void runClearCache(Callback callback){
+  public void runClearCache(Promise promise){
 
-    this.clearAppCache(callback);
+    this.clearAppCache(promise);
 
   }
 
@@ -162,10 +162,10 @@ public class ClearCacheModule extends ReactContextBaseJavaModule {
   /**
    * 清除app缓存
    */
-  public void clearAppCache(Callback callback)
+  public void clearAppCache(Promise promise)
   {
 
-    ClearCacheAsyncTask asyncTask = new ClearCacheAsyncTask(myclearCacheModule,callback);
+    ClearCacheAsyncTask asyncTask = new ClearCacheAsyncTask(myclearCacheModule,promise);
     asyncTask.execute(10);
 
   }

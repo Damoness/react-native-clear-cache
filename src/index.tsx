@@ -18,9 +18,9 @@ async function getCacheSize() {
   }
 }
 
-async function runClearCache() {
+async function runClearCache(): Promise<boolean> {
   try {
-    await ClearCache.runClearCache();
+    return await ClearCache.runClearCache();
   } catch (error) {
     throw error;
   }
