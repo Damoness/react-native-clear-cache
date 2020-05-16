@@ -1,5 +1,5 @@
 {
-  "name": "react-native-clear-cache",
+  "name": "@damoness/react-native-clear-cache",
   "version": "0.1.0",
   "description": "clear cache",
   "main": "lib/commonjs/index.js",
